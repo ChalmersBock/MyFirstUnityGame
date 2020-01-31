@@ -4,39 +4,34 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float moveSpeed = 300f;
+    public float moveSpeed = 7f;
+    
     public float jumpHeight = 4f;
+    public float turnRate = 5f;
 
-    public Rigidbody player;
+    public Rigidbody playerRigid;
+    public Transform playerTrans;
 
     private bool isGrounded = true;
 
+
+    void Update()
+    {
+        float horizontal = Input.GetAxis("Horizontal") * turnRate * Time.deltaTime;
+        transform.Rotate(0, horizontal, 0);
+
+        float vertical = Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime;
+        transform.Translate(0, 0, vertical);
+    }
+
+  
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (Input.GetKey("w"))
-        {
-            player.AddForce(moveSpeed * Time.deltaTime *Vector3.forward, ForceMode.VelocityChange); 
-        }
-
-        if (Input.GetKey("s"))
-        {
-            player.AddForce(moveSpeed * Time.deltaTime * Vector3.back, ForceMode.VelocityChange);
-        }
-
-        if (Input.GetKey("a"))
-        {
-            player.AddForce(moveSpeed * Time.deltaTime * Vector3.left, ForceMode.VelocityChange);
-        }
-
-        if (Input.GetKey("d"))
-        {
-            player.AddForce(moveSpeed * Time.deltaTime * Vector3.right, ForceMode.VelocityChange);
-        }
-
+        
         if (isGrounded && Input.GetKeyDown(KeyCode.Space))
         {
-            player.AddForce(jumpHeight * Vector3.up);
+            playerRigid.AddForce(jumpHeight * Vector3.up);
         }
 
     }
