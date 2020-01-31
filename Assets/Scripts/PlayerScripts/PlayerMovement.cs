@@ -12,8 +12,6 @@ public class PlayerMovement : MonoBehaviour
     public Rigidbody playerRigid;
     public Transform playerTrans;
 
-    private bool isGrounded = true;
-
 
     void Update()
     {
@@ -22,35 +20,18 @@ public class PlayerMovement : MonoBehaviour
 
         float vertical = Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime;
         transform.Translate(0, 0, vertical);
-    }
 
-  
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        
-        if (isGrounded && Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
         {
             playerRigid.AddForce(jumpHeight * Vector3.up);
         }
-
     }
 
-    void OnCollisionEnter(Collision collision)
+    private bool IsGrounded()
     {
-        if(collision.gameObject.tag == "Ground")
-        {
-            isGrounded = true;
-        }
-    }
+        float DisstanceToTheGround = GetComponent<Collider>().bounds.extents.y;
 
-    void onCollsionExit(Collision collision)
-    {
-        if (collision.gameObject.tag == "Ground")
-        {
-            isGrounded = false;
-        }
+        return Physics.Raycast(transform.position, Vector3.down, DisstanceToTheGround + 0.1f); ;
     }
-
 
 }
